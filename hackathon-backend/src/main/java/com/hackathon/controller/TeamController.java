@@ -1,9 +1,12 @@
 package com.hackathon.controller;
 
-import com.hackathon.service.TeamService;
 import com.hackathon.dto.TeamRequest;
 import com.hackathon.entities.Team;
+import com.hackathon.entities.User;
+import com.hackathon.service.TeamService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -17,13 +20,13 @@ public class TeamController {
     }
 
     @PostMapping
-    public Team createTeam(@RequestBody TeamRequest request, @RequestParam Integer userId) {
-        return teamService.createTeam(request.getName(), userId);
+    public Team createTeam(@RequestBody TeamRequest request, @AuthenticationPrincipal User user) {
+        return teamService.createTeam(request.getName(), user);
     }
 
     @PostMapping("/{id}/join")
-    public void joinTeam(@PathVariable("id") Integer id, @RequestParam Integer userId) {
-        teamService.joinTeam(id, userId);
+    public void joinTeam(@PathVariable("id") Integer id, @AuthenticationPrincipal User user) {
+        teamService.joinTeam(id, user);
     }
 
     @GetMapping

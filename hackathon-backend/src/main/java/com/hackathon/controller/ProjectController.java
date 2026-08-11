@@ -17,7 +17,7 @@ public class ProjectController {
     }
 
     @PostMapping
-    public Project submitProject(@RequestBody ProjectRequest request, @RequestParam Integer userId) {
+    public Project submitProject(@RequestBody ProjectRequest request, @RequestParam("userId") Integer userId) {
         return projectService.submitProject(request, userId);
     }
 
