@@ -29,8 +29,18 @@ public class TeamController {
         teamService.joinTeam(id, user);
     }
 
+    @DeleteMapping("/{id}/leave")
+    public void leaveTeam(@PathVariable("id") Integer id, @AuthenticationPrincipal User user) {
+        teamService.leaveTeam(id, user);
+    }
+
     @GetMapping
     public List<Team> getAllTeams() {
         return teamService.getAllTeams();
+    }
+
+    @GetMapping("/my-team")
+    public Team getMyTeam(@AuthenticationPrincipal User user) {
+        return teamService.getMyTeam(user);
     }
 }

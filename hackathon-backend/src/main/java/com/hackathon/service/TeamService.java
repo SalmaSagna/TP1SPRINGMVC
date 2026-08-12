@@ -21,6 +21,10 @@ public class TeamService {
     }
 
     public Team createTeam(String name, User creator) {
+        if (teamMemberRepository.findByUser(creator).isPresent()) {
+            throw new IllegalStateException("Vous êtes déjà membre d'une équipe. Quittez-la avant d'en créer une nouvelle.");
+        }
+
         Team team = new Team();
         team.setName(name);
         team.setCreatedBy(creator);
@@ -35,12 +39,12 @@ public class TeamService {
     }
 
     public void joinTeam(Integer teamId, User user) {
+        if (teamMemberRepository.findByUser(user).isPresent()) {
+            throw new IllegalStateException("Vous êtes déjà membre d'une équipe. Quittez-la avant d'en rejoindre une nouvelle.");
+        }
+
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new IllegalArgumentException("Équipe introuvable"));
-
-        if (teamMemberRepository.existsByUserAndTeam(user, team)) {
-            throw new IllegalStateException("Vous êtes déjà membre de cette équipe");
-        }
 
         TeamMember member = new TeamMember();
         member.setUser(user);
@@ -48,7 +52,23 @@ public class TeamService {
         teamMemberRepository.save(member);
     }
 
+    public void leaveTeam(Integer teamId, User user) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new IllegalArgumentException("Équipe introuvable"));
+
+        TeamMember membership = teamMemberRepository.findByUserAndTeam(user, team)
+                .orElseThrow(() -> new IllegalStateException("Vous n'êtes pas membre de cette équipe"));
+
+        teamMemberRepository.delete(membership);
+    }
+
     public List<Team> getAllTeams() {
         return teamRepository.findAll();
+    }
+
+    public Team getMyTeam(User user) {
+        return teamMemberRepository.findByUser(user)
+                .map(TeamMember::getTeam)
+                .orElse(null);
     }
 }

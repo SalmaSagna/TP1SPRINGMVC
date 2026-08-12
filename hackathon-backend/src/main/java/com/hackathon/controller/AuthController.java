@@ -1,5 +1,6 @@
 package com.hackathon.controller;
 
+import com.hackathon.dto.AuthResponse;
 import com.hackathon.service.AuthService;
 import com.hackathon.dto.LoginRequest;
 import com.hackathon.dto.RegisterRequest;
@@ -27,7 +28,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
 }

@@ -1,9 +1,12 @@
 package com.hackathon.controller;
 
-import com.hackathon.service.ProjectService;
 import com.hackathon.dto.ProjectRequest;
 import com.hackathon.entities.Project;
+import com.hackathon.entities.User;
+import com.hackathon.service.ProjectService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -17,8 +20,8 @@ public class ProjectController {
     }
 
     @PostMapping
-    public Project submitProject(@RequestBody ProjectRequest request, @RequestParam("userId") Integer userId) {
-        return projectService.submitProject(request, userId);
+    public Project submitProject(@RequestBody ProjectRequest request, @AuthenticationPrincipal User user) {
+        return projectService.submitProject(request, user);
     }
 
     @GetMapping

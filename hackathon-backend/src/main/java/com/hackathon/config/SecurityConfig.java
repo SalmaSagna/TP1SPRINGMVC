@@ -47,10 +47,14 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/teams/**", "/api/projects/**", "/api/leaderboard/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/teams", "/api/teams/*/join", "/api/projects").hasRole("PARTICIPANT")
+                        .requestMatchers(HttpMethod.POST, "/api/teams", "/api/teams/*/join").hasRole("PARTICIPANT")
+                        .requestMatchers(HttpMethod.DELETE, "/api/teams/*/leave").hasRole("PARTICIPANT")
+
+                        
                         .requestMatchers(HttpMethod.PUT, "/api/projects/**").hasRole("PARTICIPANT")
 
                         .requestMatchers("/api/jury/**").hasRole("JURY")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )
